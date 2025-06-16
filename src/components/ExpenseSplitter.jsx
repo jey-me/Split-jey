@@ -4,8 +4,8 @@ import AddExpensePopup from "../popups/AddExpensePopup";
 import AddItemPopup from "../popups/AddItemPopup";
 import AddMemberPopup from "../popups/AddMemberPopup";
 import GroupMenuPopup from "../popups/GroupMenuPopup";
-import NavMenu from "./navMenu";
-import ShoppingPage from "./Shoppinpage";
+import NavMenu from "./NavMenu";
+import ShoppingPage from "./ShoppinPage";
 
 
 export default function ExpenseSplitter() {
