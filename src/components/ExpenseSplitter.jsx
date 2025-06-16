@@ -4,49 +4,45 @@ import AddExpensePopup from "../popups/AddExpensePopup";
 import AddItemPopup from "../popups/AddItemPopup";
 import AddMemberPopup from "../popups/AddMemberPopup";
 import GroupMenuPopup from "../popups/GroupMenuPopup";
+import NavMenu from "./navMenu";
+import ShoppingPage from "./Shoppinpage";
+
 
 export default function ExpenseSplitter() {
   const [tripTitle, setTripTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [showGroupMenu, setShowGroupMenu] = useState(false);
-  const [showAddExpense, setShowAddExpense] = useState(false);
-  const [showAddItem, setShowAddItem] = useState(false);
-  const [showAddMember, setShowAddMember] = useState(false);
-
+  const [activePopup, setActivePopup] = useState(null);
   const [people, setPeople] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [items, setItems] = useState([]);
-
+  const handleEditToggle = () => setEditMode((prev) => !prev);
   const handleAddExpense = (expense) => {
     setExpenses([...expenses, expense]);
   };
 
+  const [view, setView] = useState('main'); 
+
   const simplifyExpenses = () => {
     const balances = {};
     people.forEach((person) => (balances[person] = 0));
-
     for (const expense of expenses) {
       const { paid_by, amount, split_between } = expense;
       const splitAmount = amount / split_between.length;
       split_between.forEach((person) => (balances[person] -= splitAmount));
       balances[paid_by] += amount;
     }
-
     for (const person in balances) {
       balances[person] = Math.round(balances[person] * 100) / 100;
     }
-
-    const creditors = [];
-    const debtors = [];
-
+    const creditors = [],
+      debtors = [];
     for (const person in balances) {
       const balance = balances[person];
       if (balance > 0) creditors.push({ person, amount: balance });
       else if (balance < 0) debtors.push({ person, amount: -balance });
     }
-
     const simplified = [];
     let i = 0,
       j = 0;
@@ -54,20 +50,16 @@ export default function ExpenseSplitter() {
       const debtor = debtors[i];
       const creditor = creditors[j];
       const settledAmount = Math.min(debtor.amount, creditor.amount);
-
       simplified.push({
         from: debtor.person,
         to: creditor.person,
         amount: settledAmount.toFixed(2),
       });
-
       debtor.amount -= settledAmount;
       creditor.amount -= settledAmount;
-
       if (Math.abs(debtor.amount) < 0.01) i++;
       if (Math.abs(creditor.amount) < 0.01) j++;
     }
-
     setTransactions(simplified);
   };
 
@@ -80,12 +72,21 @@ export default function ExpenseSplitter() {
         fontFamily: "sans-serif",
       }}
     >
+    {view === "shopping" ? (
+      <ShoppingPage
+        setActivePopup={setActivePopup}
+        activePopup={activePopup}
+        setView={setView}
+      />
+    ) : (
+      <>
       <h3
         style={{
           fontSize: "1.1rem",
           fontWeight: 500,
           opacity: 0.5,
           marginBottom: 1,
+          marginTop: 2,
           textAlign: "center",
         }}
       >
@@ -116,7 +117,6 @@ export default function ExpenseSplitter() {
               padding: "6px 10px",
               border: "1px solid #ccc",
               borderRadius: 6,
-              
             }}
           />
         ) : (
@@ -148,10 +148,7 @@ export default function ExpenseSplitter() {
         )}
       </div>
 
-            <div style={{ 
-              marginTop: 20,
-              textAlign: "center"
-              }}>
+      <div style={{ marginTop: 20, textAlign: "center" }}>
         <button onClick={simplifyExpenses}>Simplify</button>
       </div>
 
@@ -171,25 +168,62 @@ export default function ExpenseSplitter() {
         }}
       >
         <h3 style={{ margin: 0 }}>Group Members</h3>
-        <button
-          onClick={() => setShowGroupMenu(true)}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "1.4rem",
-            cursor: "pointer",
-          }}
-          title="Manage group"
-        >
-          ⚙️
-        </button>
+        <div style={{ display: "flex", gap: 10 }}>
+          {editMode && (
+            <button
+              onClick={() => setEditMode(false)}
+              style={{
+                background: "#333",
+                border: "1px solid #555",
+                padding: "4px 8px",
+                fontSize: "0.9rem",
+                borderRadius: 6,
+              }}
+            >
+              ✅ Done Editing
+            </button>
+          )}
+          <button onClick={() => setActivePopup("group")} title="Manage group">
+            ⚙️
+          </button>
+        </div>
       </div>
 
-      <div style={{ marginTop: 10 }}>
-        {" "}
-        {people
-          .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
-          .join(", ")}
+      <div
+        style={{ marginTop: 3, display: "flex", flexWrap: "wrap", gap: "8px" }}
+      >
+        {people.map((p, idx) => (
+          <div
+            key={idx}
+            style={{
+              background: "#333",
+              padding: "6px 12px",
+              borderRadius: 20,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <span>{p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()}</span>
+            {editMode && (
+              <button
+                onClick={() =>
+                  setPeople((prev) => prev.filter((_, i) => i !== idx))
+                }
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#f55",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                }}
+                title="Remove"
+              >
+                ❌
+              </button>
+            )}
+          </div>
+        ))}
       </div>
 
       <div
@@ -201,7 +235,7 @@ export default function ExpenseSplitter() {
         }}
       >
         <h3 style={{ margin: 0 }}>Expenses</h3>
-        <button onClick={() => setShowAddExpense(true)}>➕</button>
+        <button onClick={() => setActivePopup("addExpense")}>➕</button>
       </div>
 
       <div>
@@ -217,49 +251,49 @@ export default function ExpenseSplitter() {
         })}
       </div>
 
+      <ShoppingList items={items} setItems={setItems} people={people} />
 
+      <NavMenu
+        setActivePopup={setActivePopup}
+        activePopup={activePopup}
+        setView={setView}
+      />
 
-<ShoppingList items={items} setItems={setItems} people={people} />
-
-
-
-      {showAddExpense && (
+      {activePopup === "addExpense" && (
         <AddExpensePopup
           people={people}
           onAdd={handleAddExpense}
-          onClose={() => setShowAddExpense(false)}
+          onClose={() => setActivePopup(null)}
         />
       )}
 
-      {showAddItem && (
+      {activePopup === "addItem" && (
         <AddItemPopup
           people={people}
           onAdd={(item) => setItems([...items, item])}
-          onClose={() => setShowAddItem(false)}
+          onClose={() => setActivePopup(null)}
         />
       )}
 
-      {showAddMember && (
+      {activePopup === "addMember" && (
         <AddMemberPopup
           existingNames={people}
           onAdd={(newNames) => setPeople([...people, ...newNames])}
-          onClose={() => setShowAddMember(false)}
+          onClose={() => setActivePopup(null)}
         />
       )}
 
-      {showGroupMenu && (
+      {activePopup === "group" && (
         <GroupMenuPopup
-          onAdd={() => setShowAddMember(true)}
-          onEditToggle={() => {
-            setEditMode(!editMode);
-            setShowGroupMenu(false);
-          }}
-          onClearAll={() => {
-            setPeople([]);
-          }}
-          onClose={() => setShowGroupMenu(false)}
-        />
-      )}
+          onAdd={() => setActivePopup("addMember")}
+          onEditToggle={handleEditToggle}
+          isEditMode={editMode}
+          onClearAll={() => setPeople([])}
+          onClose={() => setActivePopup(null)}
+         />
+        )}
+      </>
+    )}
     </div>
   );
 }
