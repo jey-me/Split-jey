@@ -116,6 +116,7 @@ export default function ExpenseSplitter() {
               padding: "6px 10px",
               border: "1px solid #ccc",
               borderRadius: 6,
+              
             }}
           />
         ) : (
@@ -125,6 +126,7 @@ export default function ExpenseSplitter() {
               fontWeight: "bold",
               flex: 1,
               paddingLeft: 4,
+              textAlign: "center",
             }}
           >
             {tripTitle}

@@ -31,13 +31,16 @@ const overlayStyle = {
 };
 
 const popupStyle = {
-  background: '#222',
+   background: '#222',
   borderRadius: 12,
   padding: 20,
-  maxWidth: 400,
-  width: '100%',
+  width: '90vw',           // ⬅️ limit width on mobile
+  maxWidth: 400,           // ⬅️ don't go wider on desktop
+  maxHeight: '90vh',       // ⬅️ prevent height overflow
+  overflowY: 'auto',       // ⬅️ scroll inside popup if too tall
   boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
   animation: 'fadeIn 0.2s ease-out',
+  boxSizing: 'border-box', // ⬅️ important to include padding in width
 };
 
 const headerStyle = {

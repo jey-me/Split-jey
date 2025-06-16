@@ -11,8 +11,53 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Spacing tokens */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Layout constraint */
+  --max-width: 700px;
 }
 
+/* Global reset & safety */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+/* Wrapper container (for all content) */
+#root {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+/* Typography */
+h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+h2 {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+}
+h3 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,18 +67,7 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center; 
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Buttons */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -50,9 +84,10 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid #646cff;
 }
 
+/* Light mode overrides */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -66,9 +101,9 @@ button:focus-visible {
   }
 }
 
+/* Transitions */
 .fade-out {
   opacity: 0;
   transform: scale(0.9);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
