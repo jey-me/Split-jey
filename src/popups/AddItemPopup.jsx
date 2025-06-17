@@ -50,7 +50,7 @@ export default function AddItemPopup({ people, onAdd, onClose }) {
           </select>
         </label>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
           <button onClick={onClose}>Cancel</button>
           <button onClick={handleSubmit}>Add</button>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ShoppingList from "./ShoppingList";
 
-export default function ExpenseSplitter() {
+export default function Main() {
   const [tripTitle, setTripTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -185,7 +185,7 @@ export default function ExpenseSplitter() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: 20,
+          marginTop: 10,
         }}
       >
         <h3 style={{ margin: 0 }}>Group Members</h3>
@@ -353,7 +353,7 @@ export default function ExpenseSplitter() {
         })}
       </div>
 
-      <div style={{ marginTop: 20 }}>
+      <div style={{ marginTop: 10 }}>
         <button onClick={simplifyExpenses}>Simplify</button>
       </div>
 

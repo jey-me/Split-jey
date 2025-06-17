@@ -1,8 +1,8 @@
 import React from 'react';
-import ExpenseSplitter from './components/ExpenseSplitter';
+import Main from './components/Main';
 
 function App() {
-  return <ExpenseSplitter />;
+  return <Main />;
 }
 
 export default App;

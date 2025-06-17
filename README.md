@@ -1,5 +1,5 @@
 Pendientes:
-    Incluir react icons?
+    Incluir react icons? Si, en especial para la navabar                                                                                                                                                                                                                                                                                                                                                        
     Deberia usar el boton Simplify o solo esconder los settlements?
     ![alt text](image.png)
     ![alt text](image-2.png)
@@ -7,7 +7,7 @@ Pendientes:
     Incluir imagen Your Cart is Empty, Add items to get started boton agregar
     Color de la etiqueta dle filtro no coincide con color de la etiqueta en el item.
     Hacer que tags y store siempre se cpaitalicen apra evitar duplicados
-    Incluir edicionr apida de varios items (marcar comprado, cambiar el sotre a la vez, cambiar el tag a la vez)
+    Incluir edicion rapida de varios items (marcar comprado, cambiar el sotre a la vez, cambiar el tag a la vez)
 
 
 
@@ -59,7 +59,7 @@ Filtros arriba del listado, como botones
 2. Centralización de estados
 
 Para evitar props innecesarias y mantener la lógica bajo control:
-ExpenseSplitter gestiona todos los estados globales
+Main gestiona todos los estados globales
 Los popups solo reciben handlers
 Esto permite coordinar visibilidad, edición y flujo sin complejidad innecesaria
 

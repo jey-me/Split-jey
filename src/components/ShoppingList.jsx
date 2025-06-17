@@ -1,13 +1,11 @@
-import React, { useState, useMemo } from "react";
-import AddItemPopup from "../popups/AddItemPopup";
+import React, { useMemo } from "react";
 import { getColorForTag } from "../utils/tagColors";
 
-export default function ShoppingList({ people, items, setItems }) {
-  const [showAddItem, setShowAddItem] = useState(false);
-  const [activeFilters, setActiveFilters] = useState({
+export default function ShoppingList({ items, setItems, people, onAddItem }) {
+  const [activeFilters, setActiveFilters] = React.useState({
     storeTag: null,
     useTag: null,
-    assignedTo: null
+    assignedTo: null,
   });
 
   const toggleBought = (index) => {
@@ -51,8 +49,7 @@ export default function ShoppingList({ people, items, setItems }) {
     );
   };
 
-  const hasActiveFilters = Object.values(activeFilters).some(v => v !== null);
-
+  const hasActiveFilters = Object.values(activeFilters).some((v) => v !== null);
 
   const renderTagLabelValue = (label, value) =>
     value ? renderTag(`${label}: ${value}`) : null;
@@ -75,14 +72,17 @@ export default function ShoppingList({ people, items, setItems }) {
       return false;
     if (activeFilters.useTag && item.useTag !== activeFilters.useTag)
       return false;
-    if (activeFilters.assignedTo && item.assignedTo !== activeFilters.assignedTo)
+    if (
+      activeFilters.assignedTo &&
+      item.assignedTo !== activeFilters.assignedTo
+    )
       return false;
     return true;
   });
 
   const FilterGroup = ({ label, options, filterKey }) => (
     <div style={{ marginBottom: 6 }}>
-      <strong style={{ fontSize: '0.8rem', opacity: 0.7 }}>{label}</strong>{" "}
+      <strong style={{ fontSize: "0.8rem", opacity: 0.7 }}>{label}</strong>{" "}
       {options.map((tag) => {
         const isActive = activeFilters[filterKey] === tag;
         return (
@@ -91,7 +91,7 @@ export default function ShoppingList({ people, items, setItems }) {
             onClick={() =>
               setActiveFilters((prev) => ({
                 ...prev,
-                [filterKey]: prev[filterKey] === tag ? null : tag
+                [filterKey]: prev[filterKey] === tag ? null : tag,
               }))
             }
             style={{
@@ -105,7 +105,7 @@ export default function ShoppingList({ people, items, setItems }) {
               border: isActive ? "2px solid #000" : "1px solid #aaa",
               marginRight: 6,
               marginTop: 4,
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             {tag}
@@ -116,7 +116,7 @@ export default function ShoppingList({ people, items, setItems }) {
   );
 
   return (
-    <div style={{ marginTop: 20 }}>
+    <div style={{ marginTop: 10 }}>
       <div
         style={{
           display: "flex",
@@ -125,38 +125,47 @@ export default function ShoppingList({ people, items, setItems }) {
         }}
       >
         <h3 style={{ margin: 0 }}>Shopping List</h3>
-        <button onClick={() => setShowAddItem(true)}>➕</button>
+        {onAddItem && (
+          <button onClick={onAddItem}>➕</button>
+        )}
       </div>
 
       {items.length >= 2 && (
         <div style={{ marginTop: 10, marginBottom: 12 }}>
           <FilterGroup label="Store" options={storeTags} filterKey="storeTag" />
           <FilterGroup label="Use tag" options={useTags} filterKey="useTag" />
-          <FilterGroup label="Assigned to" options={assignedTags} filterKey="assignedTo" />
+          <FilterGroup
+            label="Assigned to"
+            options={assignedTags}
+            filterKey="assignedTo"
+          />
         </div>
       )}
 
       {hasActiveFilters && (
-  <div style={{ marginBottom: 10 }}>
-    <button
-      onClick={() =>
-        setActiveFilters({ storeTag: null, useTag: null, assignedTo: null })
-      }
-      style={{
-        background: "#444",
-        color: "#fff",
-        fontSize: "0.75rem",
-        padding: "6px 10px",
-        borderRadius: 8,
-        border: "none",
-        cursor: "pointer"
-      }}
-    >
-      ✖️ Clear Filters
-    </button>
-  </div>
-)}
-
+        <div style={{ marginBottom: 10 }}>
+          <button
+            onClick={() =>
+              setActiveFilters({
+                storeTag: null,
+                useTag: null,
+                assignedTo: null,
+              })
+            }
+            style={{
+              background: "#444",
+              color: "#fff",
+              fontSize: "0.75rem",
+              padding: "6px 10px",
+              borderRadius: 8,
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            ✖️ Clear Filters
+          </button>
+        </div>
+      )}
 
       <div style={{ marginTop: 10 }}>
         {filteredItems.map((item, idx) => (
@@ -183,9 +192,18 @@ export default function ShoppingList({ people, items, setItems }) {
                 )}
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
-                <button onClick={() => toggleBought(idx)} title="Mark as bought">✅</button>
-                <button onClick={() => handleEdit(idx)} title="Edit">✏️</button>
-                <button onClick={() => handleDelete(idx)} title="Delete">🗑️</button>
+                <button
+                  onClick={() => toggleBought(idx)}
+                  title="Mark as bought"
+                >
+                  ✅
+                </button>
+                <button onClick={() => handleEdit(idx)} title="Edit">
+                  ✏️
+                </button>
+                <button onClick={() => handleDelete(idx)} title="Delete">
+                  ✖
+                </button>
               </div>
             </div>
             <div style={{ marginTop: 6 }}>
@@ -196,17 +214,6 @@ export default function ShoppingList({ people, items, setItems }) {
           </div>
         ))}
       </div>
-
-      {showAddItem && (
-        <AddItemPopup
-          people={people}
-          onAdd={(item) => {
-            setItems((prev) => [...prev, item]);
-            setShowAddItem(false);
-          }}
-          onClose={() => setShowAddItem(false)}
-        />
-      )}
     </div>
   );
 }

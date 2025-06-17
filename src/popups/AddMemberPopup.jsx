@@ -20,8 +20,7 @@ export default function AddMemberPopup({ existingNames, onAdd, onClose }) {
     <PopupWrapper title="Add Member(s)" onClose={onClose}>
       <label>
         Enter name(s), separated by commas:
-        <input
-          autoFocus
+        <input          
           value={input}
           onChange={(e) => setInput(e.target.value)}
           style={{ width: "100%", marginTop: 8 }}
