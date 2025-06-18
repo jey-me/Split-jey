@@ -47,6 +47,10 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
     () => [...new Set(items.map((i) => i.assignedTo).filter(Boolean))],
     [items]
   );
+  const useTags = useMemo(
+    () => [...new Set(items.map((i) => i.useTag).filter(Boolean))],
+    [items]
+  );
 
   const filteredItems = items.filter((item) => {
     if (activeFilters.bought !== "all" && item.bought !== activeFilters.bought)
@@ -57,8 +61,9 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
       activeFilters.assignedTo &&
       item.assignedTo !== activeFilters.assignedTo
     )
-      return false;
-    return true;
+      if (activeFilters.useTag && item.useTag !== activeFilters.useTag)
+        return false;
+        return true;
   });
 
   return (
@@ -131,6 +136,53 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
               </option>
             ))}
           </select>
+
+          <select
+            value={activeFilters.useTag || ""}
+            onChange={(e) =>
+              setActiveFilters((prev) => ({
+                ...prev,
+                useTag: e.target.value || null,
+              }))
+            }
+          >
+            <option value="">Use tag</option>
+            {useTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+
+          {Object.values(activeFilters).some(v => v && v !== "all") && (
+  <button
+    className={`fade-clear ${
+    Object.values(activeFilters).some(v => v && v !== "all") ? "" : "hidden"
+  }`}
+  onClick={() =>
+    setActiveFilters({
+      bought: "all",
+      storeTag: null,
+      useTag: null,
+      assignedTo: null,
+    })
+  }
+  style={{
+    background: "#444",
+    color: "#fff",
+    fontSize: "0.75rem",
+    padding: "6px 10px",
+    borderRadius: 8,
+    border: "none",
+    cursor: "pointer",
+    marginTop: 4,
+  }}
+
+>
+  ✖️ Clear Filters
+</button>
+
+)}
         </div>
       )}
 
@@ -229,14 +281,19 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
             <FiTrash2
               onClick={() => handleDelete(idx)}
               title="Delete"
-              style={{ cursor: "pointer", color: "#646cff", transition: "transform 0.2s ease, color 0.2s ease",
-            }}
-            onMouseDown={(e) =>
-              (e.currentTarget.style.transform = "scale(0.9)")
-            }
-            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
+              style={{
+                cursor: "pointer",
+                color: "#646cff",
+                transition: "transform 0.2s ease, color 0.2s ease",
+              }}
+              onMouseDown={(e) =>
+                (e.currentTarget.style.transform = "scale(0.9)")
+              }
+              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            />
           </span>
         </div>
       ))}

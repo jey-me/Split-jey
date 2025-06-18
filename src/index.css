@@ -118,8 +118,8 @@ button:focus-visible {
 .nav-indicator {
   position: absolute;
   top: 2px;
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
   background-color: #646cff;
   border-radius: 50%;
   z-index: 1001;
@@ -142,4 +142,14 @@ button:focus-visible {
 .nav-icon.active {
   transform: scale(1.25);
   color: #646cff;
+}
+
+.fade-clear {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-clear.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
 }

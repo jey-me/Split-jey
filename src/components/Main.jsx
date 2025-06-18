@@ -69,7 +69,7 @@ export default function Main() {
       style={{
         maxWidth: 700,
         margin: "auto",
-        padding: 20,
+        padding: "10px 2px 80px 2px",
         fontFamily: "sans-serif",
       }}
     >
