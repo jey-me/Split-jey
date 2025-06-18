@@ -58,104 +58,98 @@ useEffect(() => {
     cursor: "pointer",
   };
 
-  return (
-    <>
-      <div
-        ref={navRef}
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "73px",
-          paddingBottom: "10px",
-          background: "#111",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          zIndex: 999,
-        }}
+return (
+  <>
+    <div
+      ref={navRef}
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: "73px",
+        paddingBottom: "10px",
+        background: "#111",
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        zIndex: 999,
+      }}
+    >
+      <button
+        ref={buttonsRef.main}
+        onClick={() => setView("main")}
+        style={buttonStyle}
       >
-        <button
-          ref={buttonsRef.main}
-          onClick={() => setView("main")}
-          style={buttonStyle}
-        >
-          {currentView === "main" ? (
-            <HiHome size={24} />
-          ) : (
-            <HiOutlineHome size={24} />
-          )}
-        </button>
+        {currentView === "main" ? (
+          <HiHome size={24} className="nav-icon active" />
+        ) : (
+          <HiOutlineHome size={24} className="nav-icon" />
+        )}
+      </button>
 
-        <button
-          ref={buttonsRef.shopping}
-          onClick={() => setView("shopping")}
-          style={buttonStyle}
-        >
-          {currentView === "shopping" ? (
-            <HiShoppingCart size={24} />
-          ) : (
-            <HiOutlineShoppingCart size={24} />
-          )}
-        </button>
+      <button
+        ref={buttonsRef.shopping}
+        onClick={() => setView("shopping")}
+        style={buttonStyle}
+      >
+        {currentView === "shopping" ? (
+          <HiShoppingCart size={24} className="nav-icon active" />
+        ) : (
+          <HiOutlineShoppingCart size={24} className="nav-icon" />
+        )}
+      </button>
 
-        <button
-          ref={buttonsRef.add}
-          onClick={() =>
-            setActivePopup(activePopup === "addMenu" ? null : "addMenu")
-          }
-          style={{
-            ...buttonStyle,
-            transform: activePopup === "addMenu" ? "scale(1.2)" : "none",
-            transition: "transform 0.2s ease",
-          }}
-        >
-          {activePopup === "addMenu" ? (
-            <HiPlusCircle size={28} />
-          ) : (
-            <HiOutlinePlusCircle size={28} />
-          )}
-        </button>
+      <button
+        ref={buttonsRef.add}
+        onClick={() =>
+          setActivePopup(activePopup === "addMenu" ? null : "addMenu")
+        }
+        style={buttonStyle}
+      >
+        {activePopup === "addMenu" ? (
+          <HiPlusCircle size={28} className="nav-icon active" />
+        ) : (
+          <HiOutlinePlusCircle size={28} className="nav-icon" />
+        )}
+      </button>
 
-        <button
-          ref={buttonsRef.expenses}
-          onClick={() => setView("expenses")}
-          style={buttonStyle}
-        >
-          {currentView === "expenses" ? (
-            <RiMoneyEuroCircleFill size={24} />
-          ) : (
-            <RiMoneyEuroCircleLine size={24} />
-          )}
-        </button>
+      <button
+        ref={buttonsRef.expenses}
+        onClick={() => setView("expenses")}
+        style={buttonStyle}
+      >
+        {currentView === "expenses" ? (
+          <RiMoneyEuroCircleFill size={24} className="nav-icon active" />
+        ) : (
+          <RiMoneyEuroCircleLine size={24} className="nav-icon" />
+        )}
+      </button>
 
-        <button
-          ref={buttonsRef.more}
-          onClick={() => setActivePopup(activePopup === "more" ? null : "more")}
-          style={buttonStyle}
-        >
-          {activePopup === "more" ? (
-            <HiDotsHorizontal size={24} />
-          ) : (
-            <HiOutlineDotsHorizontal size={24} />
-          )}
-        </button>
+      <button
+        ref={buttonsRef.more}
+        onClick={() => setActivePopup(activePopup === "more" ? null : "more")}
+        style={buttonStyle}
+      >
+        {activePopup === "more" ? (
+          <HiDotsHorizontal size={24} className="nav-icon active" />
+        ) : (
+          <HiOutlineDotsHorizontal size={24} className="nav-icon" />
+        )}
+      </button>
 
-        {/* Animated dot */}
-        <div className="nav-indicator" style={{ left: dotLeft }} />
-      </div>
+      <div className="nav-indicator" style={{ left: dotLeft }} />
+    </div>
 
-      {activePopup === "addMenu" && (
-        <AddMenuPopup setActivePopup={setActivePopup} />
-      )}
+    {activePopup === "addMenu" && (
+      <AddMenuPopup setActivePopup={setActivePopup} />
+    )}
 
-      {activePopup === "more" && (
-        <MoreMenuPopup
-          setActivePopup={setActivePopup}
-          setEditingTitle={setEditingTitle}
-        />
-      )}
-    </>
-  );
-}
+    {activePopup === "more" && (
+      <MoreMenuPopup
+        setActivePopup={setActivePopup}
+        setEditingTitle={setEditingTitle}
+      />
+    )}
+  </>
+)};

@@ -12,7 +12,7 @@ export default function ExpensesList({ expenses, people, onAddExpense }) {
         }}
       >
         <h3 style={{ margin: 0 }}>Expenses</h3>
-        <button onClick={onAddExpense}>➕</button>
+        {onAddExpense && <button onClick={onAddExpense}>➕</button>}
       </div>
 
       {expenses.length === 0 ? (

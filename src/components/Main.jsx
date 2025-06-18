@@ -14,7 +14,7 @@ export default function Main() {
   const [editingTitle, setEditingTitle] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [activePopup, setActivePopup] = useState(null);
-  const [people, setPeople] = useState(["Jey", "Eli"]);
+  const [people, setPeople] = useState(["Jey", "Eli", "Victor", "Yoli", "Alex", "Jordi"]);
   const [expenses, setExpenses] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [items, setItems] = useState([]);

@@ -53,10 +53,10 @@ h1 {
   line-height: 1.1;
 }
 h2 {
-  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-size: clamp(1.2rem, 3.5vw, 2rem);
 }
 h3 {
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: clamp(0.9rem, 3vw, 1.5rem);
 }
 a {
   font-weight: 500;
@@ -127,3 +127,19 @@ button:focus-visible {
   animation: bounce 0.8s ease;
 }
 
+.nav-icon {
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.nav-icon:hover {
+  transform: scale(1.1) translateY(-1px);
+}
+
+.nav-icon:active {
+  transform: scale(0.95);
+}
+
+.nav-icon.active {
+  transform: scale(1.25);
+  color: #646cff;
+}

@@ -68,7 +68,7 @@ export default function ExpensesPage({
       )}
 
       <div style={{ paddingBottom: 80 }}>
-        <h2 style={{ textAlign: "center", marginTop: 10 }}>💸 Expenses</h2>
+       
 
         <div
           style={{

@@ -1,8 +1,10 @@
 import React, { useMemo } from "react";
 import { getColorForTag } from "../utils/tagColors";
+import { FiCheckCircle, FiEdit2, FiTrash2 } from "react-icons/fi";
 
 export default function ShoppingList({ items, setItems, people, onAddItem }) {
   const [activeFilters, setActiveFilters] = React.useState({
+    bought: "all",
     storeTag: null,
     useTag: null,
     assignedTo: null,
@@ -26,40 +28,19 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
     alert("Edit feature pending");
   };
 
-  const renderTag = (label) => {
-    const color = getColorForTag(label);
-    return (
-      <span
-        key={label}
-        style={{
-          backgroundColor: color,
-          opacity: 0.7,
-          borderRadius: 12,
-          padding: "4px 10px",
-          fontSize: "0.75rem",
-          color: "#000",
-          fontWeight: 500,
-          marginRight: 6,
-          display: "inline-block",
-          marginTop: 4,
-        }}
-      >
-        {label}
-      </span>
-    );
+  const tagStyle = {
+    background: "#eee",
+    color: "#333",
+    fontSize: "0.65rem",
+    fontWeight: 500,
+    padding: "2px 6px",
+    borderRadius: "12px",
+    marginRight: 4,
+    marginTop: 2,
   };
-
-  const hasActiveFilters = Object.values(activeFilters).some((v) => v !== null);
-
-  const renderTagLabelValue = (label, value) =>
-    value ? renderTag(`${label}: ${value}`) : null;
 
   const storeTags = useMemo(
     () => [...new Set(items.map((i) => i.storeTag).filter(Boolean))],
-    [items]
-  );
-  const useTags = useMemo(
-    () => [...new Set(items.map((i) => i.useTag).filter(Boolean))],
     [items]
   );
   const assignedTags = useMemo(
@@ -68,9 +49,9 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
   );
 
   const filteredItems = items.filter((item) => {
-    if (activeFilters.storeTag && item.storeTag !== activeFilters.storeTag)
+    if (activeFilters.bought !== "all" && item.bought !== activeFilters.bought)
       return false;
-    if (activeFilters.useTag && item.useTag !== activeFilters.useTag)
+    if (activeFilters.storeTag && item.storeTag !== activeFilters.storeTag)
       return false;
     if (
       activeFilters.assignedTo &&
@@ -79,41 +60,6 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
       return false;
     return true;
   });
-
-  const FilterGroup = ({ label, options, filterKey }) => (
-    <div style={{ marginBottom: 6 }}>
-      <strong style={{ fontSize: "0.8rem", opacity: 0.7 }}>{label}</strong>{" "}
-      {options.map((tag) => {
-        const isActive = activeFilters[filterKey] === tag;
-        return (
-          <button
-            key={tag}
-            onClick={() =>
-              setActiveFilters((prev) => ({
-                ...prev,
-                [filterKey]: prev[filterKey] === tag ? null : tag,
-              }))
-            }
-            style={{
-              backgroundColor: getColorForTag(tag),
-              opacity: isActive ? 1 : 0.5,
-              color: "#000",
-              fontWeight: 500,
-              fontSize: "0.75rem",
-              padding: "4px 10px",
-              borderRadius: 20,
-              border: isActive ? "2px solid #000" : "1px solid #aaa",
-              marginRight: 6,
-              marginTop: 4,
-              cursor: "pointer",
-            }}
-          >
-            {tag}
-          </button>
-        );
-      })}
-    </div>
-  );
 
   return (
     <div style={{ marginTop: 10 }}>
@@ -125,96 +71,175 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
         }}
       >
         <h3 style={{ margin: 0 }}>Shopping List</h3>
-        {onAddItem && (
-          <button onClick={onAddItem}>➕</button>
-        )}
+        {onAddItem && <button onClick={onAddItem}>➕</button>}
       </div>
-
 
       {items.length >= 2 && (
-        <div style={{ marginTop: 10, marginBottom: 12 }}>
-          <FilterGroup label="Store" options={storeTags} filterKey="storeTag" />
-          <FilterGroup label="Use tag" options={useTags} filterKey="useTag" />
-          <FilterGroup
-            label="Assigned to"
-            options={assignedTags}
-            filterKey="assignedTo"
-          />
-        </div>
-      )}
-
-      {hasActiveFilters && (
-        <div style={{ marginBottom: 10 }}>
-          <button
-            onClick={() =>
-              setActiveFilters({
-                storeTag: null,
-                useTag: null,
-                assignedTo: null,
-              })
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            marginBottom: 12,
+          }}
+        >
+          <select
+            value={activeFilters.bought}
+            onChange={(e) =>
+              setActiveFilters((prev) => ({
+                ...prev,
+                bought:
+                  e.target.value === "all" ? "all" : e.target.value === "true",
+              }))
             }
-            style={{
-              background: "#444",
-              color: "#fff",
-              fontSize: "0.75rem",
-              padding: "6px 10px",
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-            }}
           >
-            ✖️ Clear Filters
-          </button>
+            <option value="all">All</option>
+            <option value="true">Bought</option>
+            <option value="false">Pending</option>
+          </select>
+
+          <select
+            value={activeFilters.storeTag || ""}
+            onChange={(e) =>
+              setActiveFilters((prev) => ({
+                ...prev,
+                storeTag: e.target.value || null,
+              }))
+            }
+          >
+            <option value="">Store</option>
+            {storeTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={activeFilters.assignedTo || ""}
+            onChange={(e) =>
+              setActiveFilters((prev) => ({
+                ...prev,
+                assignedTo: e.target.value || null,
+              }))
+            }
+          >
+            <option value="">Assigned to</option>
+            {assignedTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 
-      <div style={{ marginTop: 10 }}>
-        {filteredItems.map((item, idx) => (
-          <div
-            key={idx}
+      {filteredItems.map((item, idx) => (
+        <div
+          key={idx}
+          style={{
+            background: item.bought ? "#333" : "#222",
+            color: "#fff",
+            padding: "8px 10px",
+            borderRadius: 8,
+            marginBottom: 8,
+            fontSize: "0.9rem",
+            opacity: item.bought ? 0.5 : 1,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <FiCheckCircle
+            onClick={() => toggleBought(idx)}
+            title="Mark as bought"
             style={{
-              padding: 12,
-              marginBottom: 10,
-              borderRadius: 8,
-              border: "1px solid #ddd",
-              opacity: item.bought ? 0.5 : 1,
-              background: item.bought ? "#333" : "#222",
-              transition: "opacity 0.3s",
-              color: "#fff",
+              cursor: "pointer",
+              color: item.bought ? "#0a0" : "#646cff",
+              flexShrink: 0,
+              fontSize: "1.8rem",
+              marginRight: "10px",
+              transition: "transform 0.2s ease, color 0.2s ease",
             }}
+            onMouseDown={(e) =>
+              (e.currentTarget.style.transform = "scale(0.9)")
+            }
+            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+
+          <div
+            style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <strong>{item.name}</strong>{" "}
-                {item.quantity && (
-                  <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>
-                    — Quantity: {item.quantity}
-                  </span>
-                )}
-              </div>
-              <div style={{ display: "flex", gap: "8px" }}>
-                <button
-                  onClick={() => toggleBought(idx)}
-                  title="Mark as bought"
-                >
-                  ✅
-                </button>
-                <button onClick={() => handleEdit(idx)} title="Edit">
-                  ✏️
-                </button>
-                <button onClick={() => handleDelete(idx)} title="Delete">
-                  ✖
-                </button>
-              </div>
-            </div>
-            <div style={{ marginTop: 6 }}>
-              {renderTagLabelValue("Store", item.storeTag)}
-              {renderTagLabelValue("Use", item.useTag)}
-              {renderTagLabelValue("Assigned to", item.assignedTo)}
+            <span style={{ fontWeight: 600 }}>
+              {item.name}
+              {item.quantity && <span> – {item.quantity}</span>}
+            </span>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 4,
+                marginTop: 4,
+              }}
+            >
+              {item.storeTag && (
+                <span style={{ ...tagStyle, backgroundColor: "#1abc9c" }}>
+                  Store
+                </span>
+              )}
+              {item.useTag && (
+                <span style={{ ...tagStyle, backgroundColor: "#e91e63" }}>
+                  Use tag
+                </span>
+              )}
+              {item.assignedTo && (
+                <span style={{ ...tagStyle, backgroundColor: "#f1c40f" }}>
+                  Assigned to
+                </span>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+
+          <span
+            style={{
+              display: "flex",
+              gap: 12,
+              fontSize: "1.8rem",
+              marginRight: "2px",
+            }}
+          >
+            <FiEdit2
+              onClick={() => handleEdit(idx)}
+              title="Edit"
+              style={{
+                cursor: "pointer",
+                color: "#646cff",
+                marginRight: "10px",
+                transition: "transform 0.2s ease, color 0.2s ease",
+              }}
+              onMouseDown={(e) =>
+                (e.currentTarget.style.transform = "scale(0.9)")
+              }
+              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            />
+            <FiTrash2
+              onClick={() => handleDelete(idx)}
+              title="Delete"
+              style={{ cursor: "pointer", color: "#646cff", transition: "transform 0.2s ease, color 0.2s ease",
+            }}
+            onMouseDown={(e) =>
+              (e.currentTarget.style.transform = "scale(0.9)")
+            }
+            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
