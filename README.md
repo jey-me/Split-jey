@@ -111,3 +111,27 @@ Repositorio: github.com/tuusuario/splitter-by-jey
 Deploy: https://jeysplit.netlify.app/
 
 📅 Desarrollado en 2025 por Jey. Diseño, lógica y desarrollo desde cero.
+
+
+FASE 1
+ExpensePage.
+-Renderizamos ExpensesList en ExpensePage (igual que ShoppinList dentro de ShoppingPage)
+-Agregamos boton "simplificar" (el mismo de Main)
+-Añadimos un botón "exportar cuentas" (por desarrollar, no lo haremos ahora)
+-Hacemos que todos los botones del NavMenu funcionen correctamente (como en la pagina Main y ShoppingPage)
+- Hacemos que tods los PopUp funcionen correctamente.
+
+FASE 2
+1.Para el NavMenu mostaremos al usuario (de manera sutil) en que pagina estamos
+2.Para el NavMenu damos protagonismo leve al elmento principal "add"
+3.Cambiamos el botón compartir en el NavMenu por un botón desplegable (se desplegará en bottom right) y mostrará las opciones: Manage Group Members, Change title, Share this trip, donate to creator.
+4.Usamos react icons para hacer todo mas minimalista y funcional, usaremos iconos de contrno para el NavMenu y rellenos cuando el usuario esté en la página o haga una acción. incluiremos animaciones elegantes minimalistas.
+
+FASE 3
+Cambiar todos los iconos por iconos react, siempre con enfoque sleek, elegant, minimalist
+
+FASE 4 
+Animaciones y transiciones
+
+FASE 5
+Shopping PAGE, mejoras a shoppinglist: eicion multiple de items (borrar, marcar como comprado, assign to, sotre, use tag.

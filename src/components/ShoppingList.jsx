@@ -130,6 +130,7 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
         )}
       </div>
 
+
       {items.length >= 2 && (
         <div style={{ marginTop: 10, marginBottom: 12 }}>
           <FilterGroup label="Store" options={storeTags} filterKey="storeTag" />

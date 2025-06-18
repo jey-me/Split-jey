@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddMenuPopup from "../popups/AddMenuPopup";
 import MoreMenuPopup from "../popups/MoreMenuPopup";
-
 import {
   HiOutlineHome,
   HiHome,
@@ -9,12 +8,9 @@ import {
   HiShoppingCart,
   HiOutlinePlusCircle,
   HiPlusCircle,
-  HiOutlineUsers,
-  HiUsers,
   HiOutlineDotsHorizontal,
   HiDotsHorizontal,
 } from "react-icons/hi";
-
 import { RiMoneyEuroCircleLine, RiMoneyEuroCircleFill } from "react-icons/ri";
 
 export default function NavMenu({
@@ -24,33 +20,35 @@ export default function NavMenu({
   currentView,
   setEditingTitle,
 }) {
-  const navStyle = {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: "60px",
-    background: "#111",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    zIndex: 999,
+  const navRef = useRef();
+  const [dotLeft, setDotLeft] = useState(0);
+
+  const buttonsRef = {
+    main: useRef(),
+    shopping: useRef(),
+    add: useRef(),
+    expenses: useRef(),
+    more: useRef(),
   };
 
-  const addMenuStyle = {
-    position: "fixed",
-    bottom: "60px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    background: "#222",
-    borderRadius: "12px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
-    padding: "10px 16px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    zIndex: 1000,
-  };
+useEffect(() => {
+  const currentKey =
+    activePopup === "addMenu"
+      ? "add"
+      : activePopup === "more"
+      ? "more"
+      : currentView;
+
+  const el = buttonsRef[currentKey]?.current;
+  const nav = navRef.current;
+
+  if (el && nav) {
+    const elRect = el.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+    const newLeft = elRect.left + elRect.width / 2 - navRect.left - 6;
+    setDotLeft(newLeft);
+  }
+}, [currentView, activePopup]);
 
   const buttonStyle = {
     background: "none",
@@ -60,17 +58,29 @@ export default function NavMenu({
     cursor: "pointer",
   };
 
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
-
-  const toggleMoreMenu = () => {
-    setShowMoreMenu((prev) => !prev);
-    setActivePopup(null);
-  };
-
   return (
     <>
-      <div style={navStyle}>
-        <button onClick={() => setView("main")} style={buttonStyle}>
+      <div
+        ref={navRef}
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "73px",
+          paddingBottom: "10px",
+          background: "#111",
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          zIndex: 999,
+        }}
+      >
+        <button
+          ref={buttonsRef.main}
+          onClick={() => setView("main")}
+          style={buttonStyle}
+        >
           {currentView === "main" ? (
             <HiHome size={24} />
           ) : (
@@ -78,7 +88,11 @@ export default function NavMenu({
           )}
         </button>
 
-        <button onClick={() => setView("shopping")} style={buttonStyle}>
+        <button
+          ref={buttonsRef.shopping}
+          onClick={() => setView("shopping")}
+          style={buttonStyle}
+        >
           {currentView === "shopping" ? (
             <HiShoppingCart size={24} />
           ) : (
@@ -87,6 +101,7 @@ export default function NavMenu({
         </button>
 
         <button
+          ref={buttonsRef.add}
           onClick={() =>
             setActivePopup(activePopup === "addMenu" ? null : "addMenu")
           }
@@ -103,7 +118,11 @@ export default function NavMenu({
           )}
         </button>
 
-        <button onClick={() => setView("expenses")} style={buttonStyle}>
+        <button
+          ref={buttonsRef.expenses}
+          onClick={() => setView("expenses")}
+          style={buttonStyle}
+        >
           {currentView === "expenses" ? (
             <RiMoneyEuroCircleFill size={24} />
           ) : (
@@ -112,9 +131,8 @@ export default function NavMenu({
         </button>
 
         <button
-          onClick={() => {
-            setActivePopup(activePopup === "more" ? null : "more");
-          }}
+          ref={buttonsRef.more}
+          onClick={() => setActivePopup(activePopup === "more" ? null : "more")}
           style={buttonStyle}
         >
           {activePopup === "more" ? (
@@ -123,6 +141,9 @@ export default function NavMenu({
             <HiOutlineDotsHorizontal size={24} />
           )}
         </button>
+
+        {/* Animated dot */}
+        <div className="nav-indicator" style={{ left: dotLeft }} />
       </div>
 
       {activePopup === "addMenu" && (
