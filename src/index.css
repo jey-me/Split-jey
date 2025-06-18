@@ -88,19 +88,22 @@ button:focus-visible {
   outline: 2px solid #646cff;
 }
 
-/* Light mode overrides */
+/* Light mode overrides -----to be tested at the end-----  */
 @media (prefers-color-scheme: light) {
-  :root {
+ /* :root {
     color: #213547;
     background-color: #ffffff;
   }
+    */
   a:hover {
     color: #747bff;
   }
   button {
     background-color: #f9f9f9;
+    color: #747bff;
   }
 }
+
 
 /* Transitions */
 .fade-out {
