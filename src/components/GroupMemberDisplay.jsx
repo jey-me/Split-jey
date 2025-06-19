@@ -1,3 +1,6 @@
+import React from "react";
+
+
 export default function GroupMembersDisplay({ people, editMode, onRemove, onToggleEdit }) {
   const capitalizar = name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
@@ -8,8 +11,8 @@ export default function GroupMembersDisplay({ people, editMode, onRemove, onTogg
           {people.map(p => (
             <span key={p} style={{
               padding: '6px 10px',
-              background: '#eee',
-              borderRadius: '16px',
+              background: '#ffff',
+              borderRadius: '80px',
               display: 'flex',
               alignItems: 'center',
               fontSize: '0.95rem'

@@ -63,7 +63,7 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
     )
       if (activeFilters.useTag && item.useTag !== activeFilters.useTag)
         return false;
-        return true;
+    return true;
   });
 
   return (
@@ -154,35 +154,35 @@ export default function ShoppingList({ items, setItems, people, onAddItem }) {
             ))}
           </select>
 
-          {Object.values(activeFilters).some(v => v && v !== "all") && (
-  <button
-    className={`fade-clear ${
-    Object.values(activeFilters).some(v => v && v !== "all") ? "" : "hidden"
-  }`}
-  onClick={() =>
-    setActiveFilters({
-      bought: "all",
-      storeTag: null,
-      useTag: null,
-      assignedTo: null,
-    })
-  }
-  style={{
-    background: "#444",
-    color: "#fff",
-    fontSize: "0.75rem",
-    padding: "6px 10px",
-    borderRadius: 8,
-    border: "none",
-    cursor: "pointer",
-    marginTop: 4,
-  }}
-
->
-  ✖️ Clear Filters
-</button>
-
-)}
+          {Object.values(activeFilters).some((v) => v && v !== "all") && (
+            <button
+              className={`fade-clear ${
+                Object.values(activeFilters).some((v) => v && v !== "all")
+                  ? ""
+                  : "hidden"
+              }`}
+              onClick={() =>
+                setActiveFilters({
+                  bought: "all",
+                  storeTag: null,
+                  useTag: null,
+                  assignedTo: null,
+                })
+              }
+              style={{
+                background: "#444",
+                color: "#fff",
+                fontSize: "0.75rem",
+                padding: "6px 10px",
+                borderRadius: 8,
+                border: "none",
+                cursor: "pointer",
+                marginTop: 4,
+              }}
+            >
+              ✖️ Clear Filters
+            </button>
+          )}
         </div>
       )}
 

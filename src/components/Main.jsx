@@ -217,6 +217,7 @@ export default function Main() {
             style={{
               marginTop: 3,
               display: "flex",
+              justifyContent: "flex-start",
               flexWrap: "wrap",
               gap: "8px",
             }}
@@ -230,7 +231,7 @@ export default function Main() {
                   borderRadius: 20,
                   display: "flex",
                   alignItems: "center",
-                  gap: 8,
+                  gap: 8,                  
                 }}
               >
                 <span>
@@ -257,20 +258,14 @@ export default function Main() {
             ))}
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 10,
-            }}
-          >
+
+          
             <ExpensesList
               expenses={expenses}
               people={people}
               onAddExpense={() => setActivePopup("addExpense")}
             />
-          </div>
+          
 
           <ShoppingList
             items={items}

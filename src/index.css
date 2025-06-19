@@ -80,6 +80,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   text-align: left;
+  color: rgb(100, 108, 255);
 }
 button:hover {
   border-color: #646cff;
@@ -88,13 +89,13 @@ button:focus-visible {
   outline: 2px solid #646cff;
 }
 
-/* Light mode overrides -----to be tested at the end-----  */
+/* Light mode overrides -----to be tested at the end----- 
 @media (prefers-color-scheme: light) {
- /* :root {
+ :root {
     color: #213547;
     background-color: #ffffff;
   }
-    */
+    
   a:hover {
     color: #747bff;
   }
@@ -103,7 +104,7 @@ button:focus-visible {
     color: #747bff;
   }
 }
-
+*/
 
 /* Transitions */
 .fade-out {
